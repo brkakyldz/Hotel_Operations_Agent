@@ -1,0 +1,55 @@
+/* Guided scenarios on the main screen: the picker, and the guide strip above the chat. */
+.guide, .picker { display: flex; flex-direction: column; gap: 14px; }
+.guide h2, .picker h2 { margin: 2px 0 2px; font-size: 1.1rem; }
+.guide h3, .picker h3 { margin: 0; font-size: 0.95rem; }
+.guide-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 16px; }
+.guide-head .hint { margin: 2px 0 0; max-width: 760px; }
+.guide-head-actions { display: flex; gap: 8px; flex: none; }
+.guide-body {
+  display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr); gap: 24px; align-items: start;
+}
+@media (max-width: 900px) { .guide-body { grid-template-columns: minmax(0, 1fr); } }
+.guide-timeline { display: flex; flex-direction: column; gap: 8px; min-width: 0; }
+
+.scenario-grid {
+  list-style: none; margin: 0; padding: 0; display: grid; gap: 12px;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 240px), 1fr));
+}
+.scenario-card {
+  display: flex; flex-direction: column; gap: 8px; align-items: flex-start; padding: 14px 16px;
+  border-radius: var(--radius-sm); background: rgba(255, 255, 255, 0.04); border: 1px solid var(--glass-line);
+}
+.scenario-card .btn { margin-top: auto; }
+.scenario-card .hint { margin: 0; }
+.scenario-number { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--accent); }
+.scenario-guest { font-size: 0.8rem; color: var(--faint); }
+
+.why { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 10px; }
+@media (max-width: 640px) { .why { grid-template-columns: minmax(0, 1fr); } }
+.why-box { border: 1px solid var(--glass-line); border-radius: var(--radius-sm); padding: 10px 12px; font-size: 0.86rem; line-height: 1.45; }
+.why-box p { margin: 0; }
+.why-box h3 { margin-bottom: 4px; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.08em; }
+.why-box.naive { border-color: rgba(243, 147, 137, 0.35); }
+.why-box.naive h3 { color: var(--err); }
+.why-box.here { border-color: rgba(118, 214, 166, 0.35); }
+.why-box.here h3 { color: var(--ok); }
+.why-details > summary { cursor: pointer; color: var(--muted); font-size: 0.85rem; }
+.why-details[open] > summary { margin-bottom: 8px; }
+
+.scenario-steps .tour-step { font-size: 0.92rem; }
+.step-body { display: flex; flex-direction: column; gap: 6px; min-width: 0; }
+.step-quote { color: var(--text); font-style: italic; }
+.step-actions { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+
+.timeline-title { color: var(--muted); font-weight: 500; }
+.timeline {
+  list-style: none; margin: 0; padding: 0 0 0 12px; display: flex; flex-direction: column; gap: 8px;
+  border-left: 2px solid var(--glass-line-strong); font-size: 0.88rem; line-height: 1.45;
+}
+.timeline li { animation: rise 0.35s ease both; }
+.timeline .at { color: var(--muted); font-variant-numeric: tabular-nums; margin-right: 8px; }
+.timeline-ok { color: var(--ok); }
+.timeline-blocked { color: var(--warn); }
+.timeline-info { color: var(--text); }
+
+.scenario-done { border-top: 1px solid var(--glass-line); padding-top: 14px; display: flex; flex-direction: column; gap: 12px; }

@@ -1,0 +1,52 @@
+name: offline-ci
+
+# Offline checks only: no OpenAI key is configured and no live test runs here.
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  backend:
+    runs-on: ubuntu-latest
+    env:
+      OPENAI_API_KEY: ""
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v6
+        with:
+          python-version: "3.12"
+      - run: uv sync --locked
+      - run: uv run ruff check .
+      - run: uv run ruff format --check .
+      - run: uv run mypy src
+      - run: uv run pytest -q -m "not live"
+      - name: Migrate and seed an empty database
+        run: |
+          HOTEL_DB_PATH=$RUNNER_TEMP/ci.sqlite uv run alembic upgrade head
+          HOTEL_DB_PATH=$RUNNER_TEMP/ci.sqlite uv run python -m hotel_operations.seed
+
+  web:
+    runs-on: ubuntu-latest
+    env:
+      OPENAI_API_KEY: ""
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v6
+        with:
+          python-version: "3.12"
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "24"
+          cache: npm
+          cache-dependency-path: web/package-lock.json
+      - run: uv sync --locked
+      - run: npm --prefix web ci
+      - run: npm --prefix web run typecheck
+      - run: npm --prefix web run test -- --run
+      - run: npm --prefix web run build
+      - run: uv run python scripts/check_secrets.py
+      - run: npx --prefix web playwright install --with-deps chromium
+      - run: npm --prefix web run test:e2e
